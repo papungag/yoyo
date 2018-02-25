@@ -1,0 +1,5 @@
+# retry files
+*.retry
+
+# nginx logs
+/nginx-lb/nginx-logs/

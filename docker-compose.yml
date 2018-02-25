@@ -1,0 +1,86 @@
+version: '2'
+services:
+  auth-api:
+    build: auth-api/
+    container_name: authentication-api
+    restart: always
+    ports:
+      - "5000:5000"
+    networks:
+      widgets:
+        ipv4_address: 172.30.0.12
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+        labels: "auth-api"
+
+  transaction-api:
+    build: transaction-api/
+    container_name: transactions-api
+    restart: always
+    ports:
+      - "5001:5001"
+    networks:
+      widgets:
+        ipv4_address: 172.30.0.13
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+        labels: "transaction-api"
+
+  loyalty-worker:
+    build: loyalty-worker/
+    restart: always
+    ports:
+      - "5002:5002"
+    networks:
+      widgets:
+        ipv4_address: 172.30.0.14
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+        labels: "loyalty-worker"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      widgets:
+        ipv4_address: 172.30.0.15
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+        labels: "redis"
+
+  nginx:
+    build: nginx-lb/
+    ports:
+      - "80:80"
+    networks:
+      widgets:
+        ipv4_address: 172.30.0.16
+    volumes:
+    - ./nginx-lb/nginx-logs/:/var/log/nginx/
+
+networks:
+  widgets:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.30.0.0/24
+         gateway: 172.30.0.254
+         aux_addresses:
+          auth-api: 172.30.0.12
+          transaction-api: 172.30.0.13
+          loyalty-worker: 172.30.0.14
+          redis: 172.30.0.15
+          nginx: 172.30.0.16
