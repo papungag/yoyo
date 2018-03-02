@@ -1,5 +1,5 @@
 ### Introduction
-Yoyo Wallet [DevOps Interview] Answers
+Sample implementation of containerized microservices with Nginx reverse proxy for service routing with built-in Docker DNS
 
 ### Steps
 1. Setup development environment with ansible (Make sure that ansible hosts are configured properly)
@@ -74,4 +74,5 @@ Server: nginx/1.13.9
     "user_id": 1
 }
 ```
-[DevOps Interview]: https://github.com/yoyowallet/devops-interview
+[source]
+[source]: https://github.com/yoyowallet/devops-interview
